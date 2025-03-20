@@ -1,89 +1,86 @@
-import { Paper } from '@mui/material';
+import React, {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Paper } from '@mui/material';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { useEffect, useState } from 'react';
-import axios from '../middleware/api';
+import axios from "./api";
 import { useNavigate } from 'react-router-dom';
+import createUserForm from "./CreateUserForm";
+
 
 const Users = () => {
+// hook to manage users state
+const [users,setUsers] = useState([]);
 
-// hook to manage state
-const [users, setUsers] = useState([]);
 const navigate = useNavigate();
 
-// handler to  get users from api
-const getUsers = async () => {
-  try {
-    const response = await axios.get("/users");
-    const data = response.data;
 
-    setUsers(data);}
-  catch (error) {
+// handler to get users from api
+
+const getUsers = async () => {
+  try{
+  const response = await axios.get("/users"); // axios instance
+  const data =  response.json();
+  setUsers(data);}
+
+  catch (error){
     console.error(error);
   }
-};
 
-// hook to fetch users
+};
+// Calls getUsers every time we render the page
 useEffect(() => {
   getUsers();
-}
-, []);
+}, []);
 
 // handler to delete user
+
 const deleteUser = async (id) => {
   try {
-    await axios.delete(`/users/${id}`);
+    await axios.delete('/users/${id}');
     alert("User deleted successfully");
-    // fetch users after deletion because we want to show updated list
-    // it is just a refresh of the page
+    // fetch users after deleting the user
+    // refreshing the page
     getUsers();
   } catch (error) {
     console.error(error);
   }
 }
 
-const createUser = () => {
-  navigate('/users/create');
+// navigate for create
 
+const createUser = () => {
+
+  navigate('/users/create');
 }
+
+// navigate for update
 
 const updateUser = (user) => {
-  navigate(`/users/update/${user.id}` , { state: { user }});
+  // sends a literal object = state : user
+  navigate('/users/update/${user.id}' , {state: {user}});
 }
 
-return (
-  <Paper sx={{ padding: "16px" }}>
-    <Button variant='contained'onClick={createUser} >Create new User</Button>
-    <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
-      {users.map((user) => (
-        <Box
-          gridColumn={{ xs: "span 12", sm: "span 6", md: "span 3" }}
-          key={user.id}
-        >
-          <Card>
-            <CardContent>
-              {user.userAppName}
-              Email: {user.email}
-              Age: {user.age}
-            </CardContent>
-            <Button variant="outlined" onClick={() => { deleteUser(user.id) }}>
-              {" "}
-              delete{" "}
-            </Button>
-            <Button variant="outlined" color="secondary" onClick={ () => {updateUser(user)}}>
-              {" "}
-              update{" "}
-            </Button>
-          </Card>
-        </Box>
-      ))}
-    </Box>
-  </Paper>
-);
+// Structure to render : Container(Paper) -> One box for spacing(Box) -> One for grid(Box2)
+  return(
+    <>
+      <Paper sx={{ padding: "16px"}}>
+        <Button variant = 'contained' onClick={createUserForm}>Create User</Button>
+      <Box display="grid" gridTemplateColumns="repear(12, 1fr)" gap={2}></Box>
+      <Box gridColumn={{ xs: "span 12", sm: "span 6", md: "span 4"}}></Box>
+      <Card>
+      <CardContent>
+          
+      </CardContent>
+      </Card>
+      </Paper>
+    
+    </>
 
+  );
 
 }
 
-export default Users;
+export default users

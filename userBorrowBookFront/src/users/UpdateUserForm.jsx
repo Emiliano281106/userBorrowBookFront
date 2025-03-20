@@ -1,129 +1,25 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "../middleware/api";
-import {
-  TextField,
-  Button,
-  Paper,
-  Typography,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "./api";
+import { useLocation } from "react";
 
-const UpdateUserForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const user = location.state?.user || {};
+const updateUserForm = () => {
+    // hooks
 
-  const [userForm, setUserForm] = useState({
-    name: user.userAppName || "",
-    email: user.email || "",
-    password: user.password || "",
-    age: user.age || 0,
-    address: user.address || "",
-    archived: user.archived || false,
-    dob: user.dob || "",
-  });
+    const [userForm, setUserForm] = useState({
 
-  // Handler to update form data: onChange
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setUserForm((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    })
 
-  // Handler to submit form data
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`/users/${user.id}`, userForm);
-      alert("User updated successfully!");
-      navigate("/users"); // Redirect back to the users list
-    } catch (error) {
-      console.error("Error updating user:", error);
-      alert("Failed to update user. Please try again.");
-    }
-  };
+    const location = useLocation();
+    const navigate = useNavigate();
+    const user = location.state?.user || {}; // recibe el objeto que trae el navigate
 
-  return (
-    <Paper style={{ padding: "20px", maxWidth: "500px", margin: "20px auto" }}>
-      <Typography variant="h5">Update User</Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Name"
-          name="name"
-          value={userForm.name}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={userForm.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          value={userForm.password}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Age"
-          name="age"
-          type="number"
-          value={userForm.age}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Address"
-          name="address"
-          value={userForm.address}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={userForm.archived}
-              onChange={handleChange}
-              name="archived"
-            />
-          }
-          label="Archived"
-        />
-        <TextField
-          label="Date of Birth"
-          name="dob"
-          type="date"
-          value={userForm.dob}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Update User
-        </Button>
-      </form>
-    </Paper>
-  );
-};
+    // handler to submit
 
-export default UpdateUserForm;
+    // handler onChange
+    return(
+        <></>
+    );
+}
+
+export default updateUserForm
