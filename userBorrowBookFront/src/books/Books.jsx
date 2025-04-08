@@ -11,6 +11,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../middleware/api";
+// import BookService
+
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -19,6 +21,7 @@ const Books = () => {
   // Fetch all books
   const fetchBooks = async () => {
     try {
+      // const response = await BookService.getAllBooks(); / instead of hardcoded axios
       const response = await axios.get("/books");
       setBooks(response.data);
     } catch (error) {
@@ -31,8 +34,15 @@ const Books = () => {
     try {
       await axios.delete(`/books/${id}`);
       setBooks(books.filter((book) => book.id !== id));
+      alert("Book deleted successfully");
+      navigate("/books");
     } catch (error) {
       console.error("Error deleting book:", error);
+      if (error.response && error.response.data) {
+        alert(error.response.data);
+      } else {
+        alert("Failed to delete book. An error occurred.");
+      }
     }
   };
 
@@ -40,6 +50,9 @@ const Books = () => {
   const updateBook = (book) => {
     navigate(`/books/update/${book.id}`, { state: { book } });
   };
+
+  // Redirect to detail component
+ 
 
   // Navigate to create book form
   const createBook = () => {
